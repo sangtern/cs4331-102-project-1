@@ -1,11 +1,12 @@
 #!/usr/bin/python3
 
-# Load custom functions used in the model pipelines
+#####################################################
+################## Import Modules ###################
+#####################################################
+
 from modules.preprocessing import clean_text, lemmatize_text
 
-# Import necessary modules
 import streamlit as st
-import sklearn as sk
 import pandas as pd
 import numpy as np
 import joblib
@@ -13,10 +14,18 @@ import joblib
 import os
 import re
 
-# Global path variables
+#####################################################
+################### Path Variables ##################
+#####################################################
+
 MODELS_PATH = os.path.join("models")
 DATA_PATH = os.path.join("data")
 
+#####################################################
+#################### Functions ######################
+#####################################################
+
+@st.cache_resource
 def load_models():
     models = {}
 
@@ -28,12 +37,33 @@ def load_models():
 
         model_path = os.path.join(MODELS_PATH, m)
         with open(model_path, "rb") as file:
-            models[name_match.group(1)] = joblib.load(file)
+            model_key = re.sub(r"_", " ", name_match.group(1))
+            models[model_key] = joblib.load(file)
 
     return models
 
-binary_categroy = {
-    0: "Human",
-    1: "AI"
-}
+def predict_text(model, text):
+    X = np.array([ text ])
+    pred = model.predict(X)
+    return pred
+
+#####################################################
+################### "Backend" #######################
+#####################################################
+
 models = load_models()
+
+#####################################################
+#################### Frontend #######################
+#####################################################
+
+st.title("AI vs Human Essay Classifier with Machine Learning")
+
+chosen_model = st.selectbox("Choose a ML model:", ["Support Vector Machine", "Decision Tree", "AdaBoost"], accept_new_options=False)
+
+text = st.text_area("Enter an essay to classify.")
+
+if st.button("Submit") and text:
+    pred = predict_text(models[chosen_model], text)
+
+    st.write(pred[0])

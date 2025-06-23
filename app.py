@@ -30,15 +30,15 @@ def load_models():
     models = {}
 
     for m in os.listdir(MODELS_PATH):
-        name_match = re.match(r"optimized_model_(\w+)\.pkl", m)
+        name_match = re.match(r"optimized_model_(\w+.*)\.pkl", m)
 
         if not name_match:
             continue
 
         model_path = os.path.join(MODELS_PATH, m)
         with open(model_path, "rb") as file:
-            model_key = re.sub(r"_", " ", name_match.group(1))
-            models[model_key] = joblib.load(file)
+            model_name = name_match.group(1)
+            models[model_name] = joblib.load(file)
 
     return models
 

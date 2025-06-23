@@ -42,14 +42,19 @@ def load_models():
 
     return models
 
-def predict_text(model, text):
-    X = np.array([ text ])
-    pred = model.predict(X)
-    return pred
+def predict_text(models, model_name, text):
+    X = np.array([text])
+    return models[model_name].predict(X)[0]
 
 #####################################################
 ################### "Backend" #######################
 #####################################################
+
+# For transforming ML binary classification to associated string
+output_map = {
+    0: "Human",
+    1: "AI"
+}
 
 models = load_models()
 
@@ -64,6 +69,9 @@ chosen_model = st.selectbox("Choose a ML model:", ["Support Vector Machine", "De
 text = st.text_area("Enter an essay to classify.")
 
 if st.button("Submit") and text:
-    pred = predict_text(models[chosen_model], text)
-
-    st.write(pred[0])
+    pred = predict_text(models, chosen_model, text)
+    
+    if pred == 0:
+        st.success("Human-written!")
+    else:
+        st.error("AI-written!")

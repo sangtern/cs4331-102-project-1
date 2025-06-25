@@ -14,9 +14,20 @@ import streamlit as st
 #################### Frontend #######################
 #####################################################
 
-page = st.sidebar.selectbox("Choose something.", pages.keys())
+################### Main Page #######################
+
+page = st.sidebar.selectbox("Page Selection:", pages.keys())
 pages[page]()
 
-st.sidebar.subheader("Models loaded:")
-for name, model in models.items():
-    st.sidebar.markdown(f"- {name}")
+################## Sidebar Area #####################
+
+# Each element acts as text in one line of a file
+sidebar_model_status = [ "Models Loaded:" ]
+
+# Add text indicating loaded model(s)
+for model_name in models.keys():
+    model_text = f"- {model_name}"
+    sidebar_model_status.append(model_text)
+
+# Display the model status as an information box
+st.sidebar.info("\n".join(sidebar_model_status), icon=":material/assignment_turned_in:")

@@ -14,18 +14,15 @@ import joblib
 MODELS_PATH = os.path.join("models")
 DATA_PATH = os.path.join("data")
 
-# Binary map of output
-output_map = {
-    0: "Human",
-    1: "AI"
-}
-
 #####################################################
 #################### Functions ######################
 #####################################################
 
 @st.cache_resource
 def load_models():
+    """
+        Load the modules saved in the `models/` folder
+    """
     models = {}
 
     for m in os.listdir(MODELS_PATH):
@@ -42,13 +39,17 @@ def load_models():
     return models
 
 def predict_text(model_name, text):
+    """
+        Classify whether given text input is human- or AI-written
+        and return both the predicted classification and class
+        probability
+    """
     model = models[model_name]
     X = np.array([text])
 
     pred = model.predict(X)[0]
-    score = model.predict_proba(X)
-    features = model.named_steps["vectorizer"].get_feature_names_out()
+    score = model.predict_proba(X)[0]
 
-    return pred, score, features
+    return pred, score
 
 models = load_models()

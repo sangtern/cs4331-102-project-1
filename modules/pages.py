@@ -228,6 +228,6 @@ def compare():
 pages = {
     "Home": home,
     "Single Prediction": single,
-    "Batch Processing": batch,
+    "Batch Prediction": batch,
     "Models Comparison": compare
 }

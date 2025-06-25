@@ -9,6 +9,14 @@ from nltk.tokenize import word_tokenize
 import re
 import string
 
+# Download necessary NLTK resources for text processing
+nltk.download("wordnet") # WordNet for lemmatization
+nltk.download("punkt") # Tokenizer
+nltk.download("punkt_tab")
+nltk.download("stopwords") # Stopwords for text cleaning
+nltk.download("averaged_perceptron_tagger") # POS tagger for part-of-speech tagging
+nltk.download("averaged_perceptron_tagger_eng") # Additional tagger for English
+
 # Create the lemmatizer object for lemmatization
 lemmatizer = WordNetLemmatizer()
 

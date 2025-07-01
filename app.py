@@ -4,6 +4,7 @@
 ################## Import Modules ###################
 #####################################################
 
+from modules.neural import CNN, RNN, LSTM
 from modules.preprocessing import clean_text, lemmatize_text
 from modules.pages import pages
 from modules.models import models

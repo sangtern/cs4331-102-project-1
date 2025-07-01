@@ -1,7 +1,8 @@
 **/*/__pycache__/
 **/*/.ipynb_checkpoints/*
-**/*/Lecture*.*
-notebooks/**/*/
+notebooks/*
+!notebooks/*.ipynb
+notebooks/Lecture*.ipynb
 notebooks/13_Build_Deep_Learning_Classifiers.ipynb
 venv/
 *.zip

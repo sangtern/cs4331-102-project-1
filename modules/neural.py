@@ -1,7 +1,10 @@
 import os
 import re
 
+import joblib
 import numpy as np
+from tensorflow.keras.preprocessing.text import Tokenizer
+from tensorflow.keras.preprocessing.sequence import pad_sequences
 import torch
 import torch.nn as nn
 
@@ -16,6 +19,7 @@ MODELS_PATH = os.path.join("models")
 DATA_PATH = os.path.join("data")
 
 EMB_MATRIX_PATH = os.path.join(MODELS_PATH, "emb_matrix.npy")
+TOKENIZER_PATH = os.path.join(MODELS_PATH, "tokenizer.pkl")
 
 # PyTorch variables
 use_cuda = torch.cuda.is_available()
@@ -24,6 +28,24 @@ device = torch.device("cuda:0" if use_cuda else "cpu")
 #####################################################
 #################### Functions ######################
 #####################################################
+
+def prepare_text(text):
+    """
+        Prepares text for input into deep learning network
+    """
+    if not os.path.exists(TOKENIZER_PATH):
+        print("Unable to find saved Tokenizer!")
+        return False
+
+    tokenizer = joblib.load(TOKENIZER_PATH)
+    
+    X_seq = tokenizer.texts_to_sequences(text)
+    print(len(X_seq))
+    X_padded = pad_sequences(X_seq, maxlen=410, padding="post")
+    X_tensor = torch.LongTensor(X_padded)
+
+    return X_tensor
+
 
 def clean_text(text):
     """Basic text cleaning"""

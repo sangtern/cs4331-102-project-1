@@ -1,4 +1,4 @@
-# AI vs Human Essay Classification with Three Machine Learning Models
+# AI vs Human Essay Classification
 
 This project is a web application powered by streamlit serving as a frontend to allow users to manually enter essay text or upload a document in either `.pdf` or `.docx` file formats. Users can choose wich of the 6, pre-trained models to use in classifying their essay. The web application also features the classification of the essay from all 6 models at the same time, showing both their predictions and confidence scores.
 
@@ -27,6 +27,9 @@ This project is a web application powered by streamlit serving as a frontend to 
 * Anaconda/Miniconda
 
 ## Installation
+
+> [!NOTE]
+> Please fully read the installation steps carefully before attempting to follow it.
 
 1. `git clone` or download the repository
     * Cloning the repository:

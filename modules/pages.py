@@ -163,7 +163,7 @@ def batch():
         
         for page in reader.pages:
             text += page.extract_text() or ""
-    elif file_type == "docx":
+    elif file_type == "docx" or "openxmlformats" in file_type:
         # Reference: https://stackoverflow.com/questions/25228106/how-to-extract-text-from-an-existing-docx-file-using-python-docx
         doc = Document(uploaded_file)
 

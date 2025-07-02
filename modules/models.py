@@ -8,7 +8,7 @@ import sklearn
 import joblib
 import torch
 
-from modules.neural import device
+import modules.neural as neural
 
 #####################################################
 ################# Global Variables ##################
@@ -46,7 +46,7 @@ def load_models():
             # Model is a deep learning model!
             with open(model_path, "rb") as file:
                 model_name = name_match.group(2)
-                models[model_name] = torch.load(file, map_location=device, weights_only=False)
+                models[model_name] = torch.load(file, map_location=neural.device, weights_only=False)
 
     return models
 
@@ -58,9 +58,29 @@ def predict_text(model_name, text):
     """
     model = models[model_name]
     X = np.array([text])
+    pred = None
+    score = None
 
-    pred = model.predict(X)[0]
-    score = model.predict_proba(X)[0]
+    if model_name in ["CNN", "RNN", "LSTM"]:
+        if len(text) == 0:
+            st.error("Input text is empty!")
+            return False, False
+
+        cleaned = neural.clean_text(text)
+        X = neural.prepare_text(cleaned)
+
+        model.eval()
+
+        log_probs = None
+        with torch.no_grad():
+            log_probs = model(X)
+
+        score = torch.exp(log_probs).cpu().numpy()[0]
+        pred = score.argmax()
+    
+    else:
+        pred = model.predict(X)[0]
+        score = model.predict_proba(X)[0]
 
     return pred, score
 

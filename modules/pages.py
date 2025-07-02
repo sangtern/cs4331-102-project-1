@@ -25,6 +25,9 @@ def predict(chosen_model, text_input, show_title=False):
     if show_title:
         st.header(chosen_model)
 
+    # Indicate to the user that the prediction has started
+    st.badge("Predicting... please wait.", icon=":material/online_prediction:", color="blue")
+
     #### Displaying of Classification Prediction ####
     pred, score = predict_text(chosen_model, text_input)
 
@@ -34,6 +37,7 @@ def predict(chosen_model, text_input, show_title=False):
         st.error("The text is written by an AI!")
     else:
         st.error(f"ERROR: Unknown prediction of {pred}!")
+        return
 
 
     #### Displaying of Confidence Scores ####
@@ -53,6 +57,16 @@ def predict(chosen_model, text_input, show_title=False):
         "score": score
     })
     st.bar_chart(df_score.set_index("class"))
+
+
+def choose_model():
+    chosen_model = st.selectbox("Choose a Model:",
+                                ["CNN", "RNN", "LSTM",
+                                 "Support Vector Machine",
+                                 "Decision Tree", "AdaBoost"],
+                                accept_new_options=False)
+
+    return chosen_model
 
 
 ########################################
@@ -105,9 +119,7 @@ def home():
 def single():
     st.title("Single Prediction")
 
-    chosen_model = st.selectbox("Choose a Model:",
-                                ["Support Vector Machine", "Decision Tree", "AdaBoost"],
-                                accept_new_options=False)
+    chosen_model = choose_model()
 
     # Input
     text = st.text_area("Enter an essay to predict:", height=200)
@@ -127,9 +139,7 @@ def single():
 def batch():
     st.title("Batch Prediction")
 
-    chosen_model = st.selectbox("Choose a Model:",
-                                ["Support Vector Machine", "Decision Tree", "AdaBoost"],
-                                accept_new_options=False)
+    chosen_model = choose_model()
 
     uploaded_file = st.file_uploader("Upload a `.pdf` or `.docx` file:", type=["pdf", "docx"])
     submitted = st.button("Submit")
@@ -139,11 +149,8 @@ def batch():
     if submitted and not uploaded_file:
         st.error("Please upload either a `.pdf` or `.docx` file before submitting!")
         return
-    elif not submitted:
+    elif not submitted or not uploaded_file:
         return
-
-    # Indicate to the user that the prediction has started
-    st.badge("Predicting... please wait....", icon=":material/online_prediction:", color="blue")
     
     #### Assumes user has submitted with uploaded file ####
     file_type = uploaded_file.type.split("/")[1]
@@ -191,9 +198,6 @@ def compare():
         return
     elif not submitted:
         return
-    
-    # Indicate to the user that the prediction has started
-    st.badge("Predicting... please wait....", icon=":material/online_prediction:", color="blue")
 
     # If `input` is a file, store the file's content instead
     if isinstance(input, UploadedFile):
@@ -216,6 +220,8 @@ def compare():
 
     col1, col2 = st.columns(2)
     col3, _ = st.columns(2)
+    col5, col6 = st.columns(2)
+    col7, _ = st.columns(2)
 
     with col1:
         predict("Support Vector Machine", input, True)
@@ -223,6 +229,13 @@ def compare():
         predict("Decision Tree", input, True)
     with col3:
         predict("AdaBoost", input, True)
+
+    with col5:
+        predict("CNN", input, True)
+    with col6:
+        predict("RNN", input, True)
+    with col7:
+        predict("LSTM", input, True)
 
 # Easily handles selection of pages to be imported in other scripts
 pages = {

@@ -30,19 +30,19 @@ def load_models():
     models = {}
 
     for m in os.listdir(MODELS_PATH):
-        name_match = re.match(r"(model_)*(\w+.*)\.pkl", m)
+        name_match = re.match(r"model_(dl|ml)_(\w+.*)\.pkl", m)
 
         if not name_match:
             continue
 
         model_path = os.path.join(MODELS_PATH, m)
-        if name_match.group(1) is not None:
+        if name_match.group(1) == "ml":
             # Model is a machine learning model!
             with open(model_path, "rb") as file:
                 model_name = name_match.group(2)
                 models[model_name] = joblib.load(file)
 
-        else:
+        elif name_match.group(1) == "dl":
             # Model is a deep learning model!
             with open(model_path, "rb") as file:
                 model_name = name_match.group(2)

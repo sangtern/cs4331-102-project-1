@@ -22,7 +22,7 @@ This project is a web application powered by streamlit serving as a frontend to 
 > With the introduction of the `Model_Deep_Learning.ipynb` notebook, a Python version of 3.11.13 is **required** for both streamlit deployment *and* running the two Jupyter notebooks.
 
 * Git (for cloning the repository)
-* Python 3.11.13 with the `venv` or `python-virtualenv` (Linux/macOS)
+* Python 3.11.13 with the `venv` module or `python-virtualenv` package for Linux
     * ***OR:***
 * Anaconda/Miniconda
 

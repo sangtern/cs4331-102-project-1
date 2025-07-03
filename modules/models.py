@@ -9,6 +9,7 @@ import joblib
 import torch
 
 import modules.neural as neural
+from modules.preprocessing import preprocess_text
 
 #####################################################
 ################# Global Variables ##################
@@ -18,6 +19,8 @@ import modules.neural as neural
 MODELS_PATH = os.path.join("models")
 DATA_PATH = os.path.join("data")
 
+VECTOR_PATH = os.path.join(MODELS_PATH, "tfidf.pkl")
+
 #####################################################
 #################### Functions ######################
 #####################################################
@@ -25,7 +28,7 @@ DATA_PATH = os.path.join("data")
 @st.cache_resource
 def load_models():
     """
-        Load the modules saved in the `models/` folder
+        Load the models saved in the `models/` folder
     """
     models = {}
 
@@ -50,6 +53,19 @@ def load_models():
 
     return models
 
+
+@st.cache_resource
+def load_vectorizer():
+    """
+        Loads the vectorizer
+    """
+
+    if not os.path.exists(VECTOR_PATH):
+        return False
+
+    return joblib.load(VECTOR_PATH)
+
+
 def predict_text(model_name, text):
     """
         Classify whether given text input is human- or AI-written
@@ -61,6 +77,9 @@ def predict_text(model_name, text):
     pred = None
     score = None
 
+    # With the introduction of the neural network models, prediction process
+    # has been separated with the neural network models having a more
+    # extended process
     if model_name in ["CNN", "RNN", "LSTM"]:
         if len(text) == 0:
             st.error("Input text is empty!")
@@ -79,6 +98,17 @@ def predict_text(model_name, text):
         pred = score.argmax()
     
     else:
+        # Change X to something AdaBoost can read if predicting with AdaBoost
+        if model_name == "AdaBoost":
+            vectorizer = load_vectorizer()
+            
+            if not vectorizer:
+                st.error("Vectorizer doesn't exist!")
+                return
+
+            cleaned = preprocess_text(X)
+            X = vectorizer.transform(cleaned)
+
         pred = model.predict(X)[0]
         score = model.predict_proba(X)[0]
 

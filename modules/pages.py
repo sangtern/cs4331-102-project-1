@@ -75,8 +75,8 @@ def choose_model():
 
 ############## Home Page ###############
 def home():
-    st.title("AI vs Human Essay Classifier with Machine Learning")
-    st.write("This website provides 3 machine learning models to classify wether a given essay text is written by an AI or a human.")
+    st.title("AI vs Human Essay Classifier")
+    st.write("This website provides 3 machine learning models **and** 3 deep learning models to classify wether a given essay text is written by an AI or a human.")
 
     col1, col2 = st.columns(2)
     col3, col4 = st.columns(2)
@@ -85,7 +85,7 @@ def home():
         st.subheader("Single Prediction")
         st.markdown("""
                     - Manually enter essay text
-                    - Choose between 3 models
+                    - Choose between 6 models
                     - Get instant classification and confidence scores
                     """)
 
@@ -93,7 +93,7 @@ def home():
         st.subheader("Batch Predictions")
         st.markdown("""
                     - Upload a `.pdf` or `.docx` file
-                    - Choose between 3 models
+                    - Choose between 6 models
                     - Get instant classification and confidence scores
                     """)
 
@@ -101,7 +101,7 @@ def home():
         st.subheader("Models Comparison")
         st.markdown("""
                     - Choose either to manually enter text or upload a document
-                    - Get instant classification and confidence scores for all 3 models
+                    - Get instant classification and confidence scores for all 6 models
                     """)
 
     with col4:

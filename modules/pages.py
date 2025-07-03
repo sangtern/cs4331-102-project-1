@@ -211,6 +211,14 @@ def compare():
                 tmp += page.extract_text() or ""
 
             input = tmp
+        elif file_type == "docx" or "openxmlformats" in file_type:
+            doc = Document(input)
+
+            tmp = []
+            for para in doc.paragraphs:
+                tmp.append(para.text or "")
+
+            input = "\n".join(tmp)
 
 
     if not input:

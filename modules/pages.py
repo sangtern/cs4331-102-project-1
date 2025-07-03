@@ -17,7 +17,7 @@ from modules.models import predict_text
 ########### Backend Functions ##########
 ########################################
 
-def predict(chosen_model, text_input, show_title=False):
+def predict(chosen_model, text_input, show_title=False, indicate=True):
     """
         Handle the output display of prediction and probabilities
         frontend in one function, to be used in other pages
@@ -25,8 +25,10 @@ def predict(chosen_model, text_input, show_title=False):
     if show_title:
         st.header(chosen_model)
 
-    # Indicate to the user that the prediction has started
-    st.badge("Predicting... please wait.", icon=":material/online_prediction:", color="blue")
+    # Indicate to the user that the prediction has started if `indicate`
+    # is True
+    if indicate:
+        st.badge("Predicting... please wait.", icon=":material/online_prediction:", color="blue")
 
     #### Displaying of Classification Prediction ####
     pred, score = predict_text(chosen_model, text_input)
@@ -199,6 +201,8 @@ def compare():
     elif not submitted:
         return
 
+    st.badge("Predicting... please wait.", icon=":material/online_prediction:", color="blue")
+
     # If `input` is a file, store the file's content instead
     if isinstance(input, UploadedFile):
         file_type = input.type.split("/")[1]
@@ -232,18 +236,18 @@ def compare():
     col7, _ = st.columns(2)
 
     with col1:
-        predict("Support Vector Machine", input, True)
+        predict("Support Vector Machine", input, True, False)
     with col2:
-        predict("Decision Tree", input, True)
+        predict("Decision Tree", input, True, False)
     with col3:
-        predict("AdaBoost", input, True)
+        predict("AdaBoost", input, True, False)
 
     with col5:
-        predict("CNN", input, True)
+        predict("CNN", input, True, False)
     with col6:
-        predict("RNN", input, True)
+        predict("RNN", input, True, False)
     with col7:
-        predict("LSTM", input, True)
+        predict("LSTM", input, True, False)
 
 # Easily handles selection of pages to be imported in other scripts
 pages = {

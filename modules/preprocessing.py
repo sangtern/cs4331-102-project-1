@@ -17,6 +17,9 @@ nltk.download("stopwords") # Stopwords for text cleaning
 nltk.download("averaged_perceptron_tagger") # POS tagger for part-of-speech tagging
 nltk.download("averaged_perceptron_tagger_eng") # Additional tagger for English
 
+# Load the stopwords globally
+stop_words = stopwords.words("english")
+
 # Create the lemmatizer object for lemmatization
 lemmatizer = WordNetLemmatizer()
 
@@ -89,8 +92,6 @@ def clean_text(texts):
         tmp = re.sub(rf"[{ string.punctuation }]", "", tmp)
     
         # Remove stopwords
-        #STOPWORDS = stopwords.words("english")
-        stop_words = stopwords.words("english")
         tmp = " ".join([
             word for word in tmp.split() if not word in stop_words
         ])
@@ -98,3 +99,11 @@ def clean_text(texts):
         x.append(tmp)
 
     return np.array(x)
+
+
+def preprocess_text(texts):
+    """
+        Streamline clean_text and lemmatize_text into one function.
+    """
+    cleaned = clean_text(texts)
+    return lemmatize_text(cleaned)

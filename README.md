@@ -67,7 +67,7 @@ This project is a web application powered by streamlit serving as a frontend to 
 
 1. Ensure you are in the repository directory
 2. Create a conda environment by running:
-    * `conda create -n myenv --file requirements_conda.txt`
+    * `conda env create -n myenv -f ./environment.yml`
     * You can substitute `myenv` with whatever name you desire, and remember it.
 3. Activate the conda environment by running:
     * `conda activate myenv`
